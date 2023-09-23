@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up Form</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Sign Up Form</h2>
+        </div>
+
+        <form action="#" class="form" id="form">
+            <div class="form-control">
+                <label for="name">Name</label>
+                <input type="text" name="name" id="name" placeholder="Enter Your Name" autocomplete="off">
+                <i class="fas fa-check-circle"></i>
+                <i class="fas fa-exclamation-circle"></i>
+                <small>Error Message</small>
+            </div>
+
+            <div class="form-control">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" placeholder="Enter Your Email" autocomplete="off">
+                <i class="fas fa-check-circle"></i>
+                <i class="fas fa-exclamation-circle"></i>
+                <small>Error Message</small>
+            </div>
+
+            <div class="form-control">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" placeholder="Enter Your Password"
+                    autocomplete="off">
+                <i class="fas fa-check-circle"></i>
+                <i class="fas fa-exclamation-circle"></i>
+                <small>Error Message</small>
+            </div>
+
+            <div class="form-control">
+                <label for="cpassword">Confirm Password</label>
+                <input type="password" name="cpassword" id="cpassword" placeholder="Confirm Password"
+                    autocomplete="off">
+                <i class="fas fa-check-circle"></i>
+                <i class="fas fa-exclamation-circle"></i>
+                <small>Error Message</small>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" id="terms" name="terms">
+                <label for="terms">I agree with the terms & conditions</label>
+            </div>
+
+            <div class="form-line"></div>
+
+
+
+
+            <input type="submit" value="submit" class="btn">
+
+        </form>
+    </div>
+
+
+</body>
+
+</html>
+
+
+<script>
+
+
+    const form = document.getElementById('form');
+    const name = document.getElementById('name');
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+    const cpassword = document.getElementById('cpassword');
+
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        validateForm();
+    });
+
+    const sendData = (nameVal, sRate, count) => {
+        if (sRate === count) {
+            swal('Hello ' + nameVal, 'You are registered', 'success');
+        }
+    };
+
+    const successMsg = (nameVal) => {
+        const formControls = document.getElementsByClassName('form-control');
+        const count = formControls.length - 1;
+        let sRate = 0;
+        for (let i = 0; i < formControls.length; i++) {
+            if (formControls[i].className === 'form-control success') {
+                sRate++;
+                sendData(nameVal, sRate, count);
+            }
+        }
+    };
+
+    const isEmail = (emailVal) => {
+        const atSymbol = emailVal.indexOf('@');
+        if (atSymbol < 1) return false;
+        const dot = emailVal.lastIndexOf('.');
+        if (dot <= atSymbol + 2) return false;
+        if (dot === emailVal.length - 1) return false;
+        return true;
+    };
+
+    function validateForm() {
+        const nameVal = name.value.trim();
+        const emailVal = email.value.trim();
+        const passwordVal = password.value.trim();
+        const cpasswordVal = cpassword.value.trim();
+
+        // Name
+        if (nameVal === '') {
+            setErrorMsg(name, 'Name cannot be blank');
+        } else if (nameVal.length <= 2) {
+            setErrorMsg(name, 'Minimum 3 characters');
+        } else {
+            setSuccessMsg(name);
+        }
+
+        // Email
+        if (emailVal === '') {
+            setErrorMsg(email, 'Email cannot be blank');
+        } else if (!isEmail(emailVal)) {
+            setErrorMsg(email, 'Invalid email address');
+        } else {
+            setSuccessMsg(email);
+        }
+
+        // Password
+        if (passwordVal === '') {
+            setErrorMsg(password, 'Password cannot be blank');
+        } else if (passwordVal.length <= 7) {
+            setErrorMsg(password, 'Minimum 8 characters');
+        } else {
+            setSuccessMsg(password);
+        }
+
+        // Confirm Password
+        if (cpasswordVal === '') {
+            setErrorMsg(cpassword, 'Confirm password cannot be blank');
+        } else if (passwordVal !== cpasswordVal) {
+            setErrorMsg(cpassword, 'Passwords do not match');
+        } else {
+            setSuccessMsg(cpassword);
+        }
+
+        successMsg(nameVal);
+    }
+
+    function setErrorMsg(input, errorMsg) {
+        const formControl = input.parentElement;
+        const small = formControl.querySelector('small');
+        formControl.className = 'form-control error';
+        small.innerText = errorMsg;
+    }
+
+    function setSuccessMsg(input) {
+        const formControl = input.parentElement;
+        formControl.className = 'form-control success';
+    }
+</script>
